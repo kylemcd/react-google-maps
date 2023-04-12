@@ -11,25 +11,20 @@ const KlassName = process.argv[2]
 fetch(
   "https://developers.google.com/maps/documentation/javascript/3.exp/reference"
 )
-  .then(it => it.text())
-  .then(it => cheerio.load(it))
-  .then($ => {
+  .then((it) => it.text())
+  .then((it) => cheerio.load(it))
+  .then(($) => {
     const $content = $(`#${KlassName}`).parent()
     return contentToJS(KlassName, $, $content)
   })
-  .then(it => process.stdout.write(JSON.stringify(it)))
-  .catch(error => {
+  .then((it) => process.stdout.write(JSON.stringify(it)))
+  .catch((error) => {
     console.error(error)
     process.exit(1)
   })
 
 function contentToJS(KlassName, $, $content) {
-  const constructor = $content
-    .find(`#${KlassName}`)
-    .next()
-    .find("code")
-    .text()
-
+  const constructor = $content.find(`#${KlassName}`).next().find("code").text()
   const $constructorTable = $content.find(
     `[summary="class ${KlassName} - Constructor"]`
   )
@@ -41,6 +36,8 @@ function contentToJS(KlassName, $, $content) {
   const $methodsTable = $content.find(
     `[summary="class ${KlassName} - Methods"]`
   )
+  console.log($methodsTable)
+
   const methods = $methodsTable
     .find("tbody > tr")
     .map((i, tr) => {

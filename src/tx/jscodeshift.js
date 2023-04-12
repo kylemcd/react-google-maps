@@ -1,12 +1,12 @@
 import path from "path"
 import fs from "fs"
-import glob from "glob"
+import { glob } from "glob"
 import mkdirp from "mkdirp"
 import jscodeshift from "jscodeshift"
 
 import tx from "./MapChild"
 
-const relativeToCwd = it => path.relative(process.cwd(), it)
+const relativeToCwd = (it) => path.relative(process.cwd(), it)
 
 glob
   .sync("**/*.jsx", {
@@ -14,7 +14,7 @@ glob
     ignore: "*.spec.jsx",
   })
   // .slice(0, 1)
-  .map(it => {
+  .map((it) => {
     const filename = path.resolve(__dirname, "../macros/", it)
     const nextFilename = path.resolve(__dirname, "../components/", it)
     console.log(
@@ -24,7 +24,7 @@ glob
     )
 
     const source = fs.readFileSync(filename, "utf8")
-    const output = tx({ source }, { jscodeshift })
+    const output = ({ source }, { jscodeshift })
     mkdirp.sync(path.dirname(nextFilename))
     fs.writeFileSync(nextFilename, output)
   })
